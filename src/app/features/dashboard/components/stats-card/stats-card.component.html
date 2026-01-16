@@ -1,0 +1,23 @@
+<div class="bg-white shadow-md rounded-lg p-6" [ngClass]="cardColorClass">
+  <div class="flex items-center justify-between">
+    <div class="flex-1">
+      <p class="text-gray-600 text-sm mb-1">{{ title }}</p>
+      <p class="text-3xl font-bold text-gray-800">{{ value }}</p>
+    </div>
+    <div class="text-4xl" [ngClass]="iconColorClass">
+      @if (icon === 'users') {
+        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      } @else if (icon === 'tasks') {
+        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+      } @else if (icon === 'clock') {
+        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      }
+    </div>
+  </div>
+</div>

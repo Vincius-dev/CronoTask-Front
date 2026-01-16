@@ -1,0 +1,83 @@
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+  <div class="flex items-center mb-6">
+    <button 
+      (click)="onBack()"
+      class="mr-4 text-gray-600 hover:text-gray-800 transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+    </button>
+    <h1 class="text-3xl font-bold text-gray-800">
+      {{ isEditMode ? 'Editar Tarefa' : 'Nova Tarefa' }}
+    </h1>
+  </div>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else {
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="bg-white shadow-md rounded-lg p-6">
+      @if (error) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {{ error }}
+        </div>
+      }
+
+      <div class="mb-4">
+        <label for="userId" class="block text-gray-700 font-semibold mb-2">
+          Usuário
+        </label>
+        <input 
+          id="userId"
+          type="text"
+          formControlName="userId"
+          readonly
+          class="w-full px-4 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+          title="Usuário logado">
+        <p class="text-sm text-gray-600 mt-1">Tarefa será criada para o usuário logado</p>
+      </div>
+
+      <div class="mb-4">
+        <label for="name" class="block text-gray-700 font-semibold mb-2">
+          Nome da Tarefa *
+        </label>
+        <input 
+          id="name"
+          type="text" 
+          formControlName="name"
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          [class.border-red-500]="taskForm.get('name')?.invalid && taskForm.get('name')?.touched">
+        @if (taskForm.get('name')?.invalid && taskForm.get('name')?.touched) {
+          <p class="text-red-500 text-sm mt-1">Nome deve ter no mínimo 3 caracteres</p>
+        }
+      </div>
+
+      <div class="mb-6">
+        <label for="description" class="block text-gray-700 font-semibold mb-2">
+          Descrição
+        </label>
+        <textarea 
+          id="description"
+          formControlName="description"
+          rows="4"
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Descreva a tarefa...">
+        </textarea>
+      </div>
+
+      <div class="flex justify-end space-x-3">
+        <button 
+          type="button"
+          (click)="onBack()"
+          class="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg transition">
+          Cancelar
+        </button>
+        <button 
+          type="submit"
+          [disabled]="taskForm.invalid || submitting"
+          class="px-6 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ submitting ? 'Salvando...' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

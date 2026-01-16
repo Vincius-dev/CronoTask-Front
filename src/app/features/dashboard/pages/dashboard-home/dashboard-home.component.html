@@ -1,0 +1,75 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else {
+    @if (error) {
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ error }}
+      </div>
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <app-stats-card 
+        title="Usuários"
+        [value]="stats.totalUsers.toString()"
+        icon="users"
+        color="blue">
+      </app-stats-card>
+      
+      <app-stats-card 
+        title="Tarefas"
+        [value]="stats.totalTasks.toString()"
+        icon="tasks"
+        color="purple">
+      </app-stats-card>
+      
+      <app-stats-card 
+        title="Tempo Total"
+        [value]="stats.totalTime | timeFormat"
+        icon="clock"
+        color="green">
+      </app-stats-card>
+    </div>
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Tarefas Recentes</h2>
+      <div class="flex space-x-3">
+        <button 
+          (click)="onNewTask()"
+          class="bg-secondary hover:bg-green-600 text-white px-6 py-3 rounded-lg transition flex items-center space-x-2 shadow-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span class="font-semibold">Nova Tarefa</span>
+        </button>
+      </div>
+    </div>
+
+    @if (recentTasks.length === 0) {
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-8 text-center">
+        <svg class="w-16 h-16 text-blue-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Nenhuma tarefa criada ainda</h3>
+        <p class="text-gray-600 mb-4">Comece criando sua primeira tarefa usando o botão acima</p>
+        <button 
+          (click)="onNewTask()"
+          class="bg-secondary hover:bg-green-600 text-white px-6 py-3 rounded-lg transition inline-flex items-center space-x-2 shadow-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span class="font-semibold">Criar Primeira Tarefa</span>
+        </button>
+      </div>
+    } @else {
+      <app-recent-tasks 
+        [tasks]="recentTasks"
+        (toggle)="onToggleTask($event)"
+        (view)="onViewTask($event)">
+      </app-recent-tasks>
+    }
+  }
+
+</div>

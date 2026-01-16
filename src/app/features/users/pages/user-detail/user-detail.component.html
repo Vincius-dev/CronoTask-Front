@@ -1,0 +1,88 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center">
+      <button 
+        (click)="onBack()"
+        class="mr-4 text-gray-600 hover:text-gray-800 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+      </button>
+      <h1 class="text-3xl font-bold text-gray-800">{{ user?.name }}</h1>
+    </div>
+    <button 
+      (click)="onEdit()"
+      class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg transition">
+      Editar
+    </button>
+  </div>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (error) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ error }}
+    </div>
+  } @else if (user) {
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <div class="flex items-center space-x-2 text-gray-700 mb-6">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+        <span>{{ user.email }}</span>
+      </div>
+
+      <h2 class="text-xl font-semibold mb-4">Estatísticas</h2>
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="bg-blue-50 p-4 rounded-lg text-center">
+          <p class="text-3xl font-bold text-primary">{{ tasks.length }}</p>
+          <p class="text-gray-600">Tarefas</p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg text-center">
+          <p class="text-3xl font-bold text-secondary">{{ totalTime | timeFormat }}</p>
+          <p class="text-gray-600">Tempo Total</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Tarefas</h2>
+        <button 
+          (click)="onNewTask()"
+          class="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-lg transition flex items-center space-x-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Nova Tarefa</span>
+        </button>
+      </div>
+
+      @if (loadingTasks) {
+        <app-loading-spinner />
+      } @else if (tasks.length === 0) {
+        <p class="text-center text-gray-500 py-8">Nenhuma tarefa encontrada</p>
+      } @else {
+        <div class="space-y-3">
+          @for (task of tasks; track task.id) {
+            <div class="flex items-center justify-between border-b pb-3 last:border-b-0">
+              <div class="flex-1">
+                <p class="font-semibold text-gray-800">{{ task.name }}</p>
+                <app-timer-display 
+                  [elapsedTime]="task.elapsedTime" 
+                  [isRunning]="task.isRunning"
+                  [showStatus]="false">
+                </app-timer-display>
+              </div>
+              <button 
+                (click)="onViewTask(task.id)"
+                class="text-primary hover:text-primary-dark transition">
+                Ver detalhes
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

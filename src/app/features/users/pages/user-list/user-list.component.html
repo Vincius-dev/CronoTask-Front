@@ -1,0 +1,61 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Usuários</h1>
+    <button 
+      (click)="onNewUser()"
+      class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      <span>Novo Usuário</span>
+    </button>
+  </div>
+
+  <div class="mb-6">
+    <input 
+      type="email" 
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+      (keyup.enter)="onSearchChange()"
+      placeholder="Digite o email completo do usuário..."
+      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+    <p class="text-sm text-gray-600 mt-2">Digite o email completo e pressione Enter para buscar</p>
+  </div>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (error) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      {{ error }}
+    </div>
+  } @else if (filteredUsers.length === 0) {
+    <div class="text-center py-12 text-gray-500">
+      <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+      <p class="text-lg">Nenhum usuário encontrado</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (user of filteredUsers; track user.id) {
+        <app-user-card 
+          [user]="user"
+          (view)="onViewUser($event)"
+          (edit)="onEditUser($event)"
+          (delete)="onDeleteUser($event)">
+        </app-user-card>
+      }
+    </div>
+  }
+
+  @if (showDeleteConfirm && userToDelete) {
+    <app-confirm-dialog
+      title="Excluir Usuário"
+      [message]="'Tem certeza que deseja excluir ' + userToDelete.name + '?'"
+      confirmText="Excluir"
+      cancelText="Cancelar"
+      (confirmed)="confirmDelete()"
+      (cancelled)="cancelDelete()">
+    </app-confirm-dialog>
+  }
+</div>

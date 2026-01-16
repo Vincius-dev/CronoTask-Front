@@ -1,0 +1,58 @@
+<div class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition">
+  <div class="flex justify-between items-start mb-3">
+    <div class="flex-1">
+      <h3 class="font-bold text-gray-800 text-lg mb-1">{{ task.name }}</h3>
+      @if (user) {
+        <p class="text-sm text-gray-600 mb-2">{{ user.name }}</p>
+      }
+    </div>
+    <button 
+      (click)="onToggle()"
+      class="p-2 rounded-lg transition"
+      [class.bg-danger]="task.isRunning"
+      [class.hover:bg-red-600]="task.isRunning"
+      [class.bg-secondary]="!task.isRunning"
+      [class.hover:bg-green-600]="!task.isRunning"
+      [class.text-white]="true"
+      title="{{ task.isRunning ? 'Parar' : 'Iniciar' }}">
+      @if (task.isRunning) {
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"></path>
+        </svg>
+      } @else {
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"></path>
+        </svg>
+      }
+    </button>
+  </div>
+
+  <div class="mb-3">
+    <app-timer-display 
+      [elapsedTime]="task.elapsedTime" 
+      [isRunning]="task.isRunning">
+    </app-timer-display>
+  </div>
+
+  @if (task.description) {
+    <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ task.description }}</p>
+  }
+
+  <div class="flex justify-end space-x-2">
+    <button 
+      (click)="onView()"
+      class="px-3 py-1 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition">
+      Ver Detalhes
+    </button>
+    <button 
+      (click)="onEdit()"
+      class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition">
+      Editar
+    </button>
+    <button 
+      (click)="onDelete()"
+      class="px-3 py-1 text-sm bg-red-100 hover:bg-red-200 text-red-700 rounded transition">
+      Excluir
+    </button>
+  </div>
+</div>

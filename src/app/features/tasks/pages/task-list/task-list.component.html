@@ -1,0 +1,56 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Tarefas</h1>
+    <button 
+      (click)="onNewTask()"
+      class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      <span>Nova Tarefa</span>
+    </button>
+  </div>
+
+  <app-task-filters 
+    (filtersChange)="onFiltersChange($event)">
+  </app-task-filters>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (error) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      {{ error }}
+    </div>
+  } @else if (filteredTasks.length === 0) {
+    <div class="text-center py-12 text-gray-500">
+      <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+      </svg>
+      <p class="text-lg">Nenhuma tarefa encontrada</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      @for (task of filteredTasks; track task.id) {
+        <app-task-card 
+          [task]="task"
+          [user]="getUserById(task.userId)"
+          (toggle)="onToggleTask($event)"
+          (view)="onViewTask($event)"
+          (edit)="onEditTask($event)"
+          (delete)="onDeleteTask($event)">
+        </app-task-card>
+      }
+    </div>
+  }
+
+  @if (showDeleteConfirm && taskToDelete) {
+    <app-confirm-dialog
+      title="Excluir Tarefa"
+      [message]="'Tem certeza que deseja excluir a tarefa ' + taskToDelete.name + '?'"
+      confirmText="Excluir"
+      cancelText="Cancelar"
+      (confirmed)="confirmDelete()"
+      (cancelled)="cancelDelete()">
+    </app-confirm-dialog>
+  }
+</div>

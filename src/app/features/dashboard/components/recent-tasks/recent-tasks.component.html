@@ -1,0 +1,51 @@
+<div class="bg-white shadow-md rounded-lg p-6">
+  @if (tasks.length === 0) {
+    <p class="text-center text-gray-500 py-8">Nenhuma tarefa encontrada</p>
+  } @else {
+    <div class="space-y-4">
+      @for (task of tasks; track task.id) {
+        <div class="border-b pb-4 last:border-b-0 last:pb-0">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-800 mb-1">{{ task.name }}</h3>
+              <p class="text-sm text-gray-600 mb-2">Usuário: {{ task.userId }}</p>
+              <app-timer-display 
+                [elapsedTime]="task.elapsedTime" 
+                [isRunning]="task.isRunning"
+                [showStatus]="false">
+              </app-timer-display>
+            </div>
+            
+            <div class="flex space-x-2 ml-4">
+              <button 
+                (click)="onToggle(task.id)"
+                class="p-2 rounded-lg transition"
+                [class.bg-danger]="task.isRunning"
+                [class.hover:bg-red-600]="task.isRunning"
+                [class.bg-secondary]="!task.isRunning"
+                [class.hover:bg-green-600]="!task.isRunning"
+                [class.text-white]="true"
+                title="{{ task.isRunning ? 'Parar' : 'Iniciar' }}">
+                @if (task.isRunning) {
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"></path>
+                  </svg>
+                } @else {
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                }
+              </button>
+              
+              <button 
+                (click)="onView(task.id)"
+                class="px-3 py-2 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition">
+                Ver
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
