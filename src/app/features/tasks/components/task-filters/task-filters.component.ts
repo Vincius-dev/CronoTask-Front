@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 interface TaskFilters {
   status: 'all' | 'running' | 'paused';
+  completionStatus: 'all' | 'completed' | 'incomplete';
   userId: string;
   sortBy: 'recent' | 'oldest' | 'time';
 }
@@ -16,6 +17,7 @@ interface TaskFilters {
 export class TaskFiltersComponent {
   filters: TaskFilters = {
     status: 'all',
+    completionStatus: 'all',
     userId: '',
     sortBy: 'recent'
   };

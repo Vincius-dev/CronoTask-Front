@@ -10,14 +10,7 @@
       </div>
     }
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <app-stats-card 
-        title="Usuários"
-        [value]="stats.totalUsers.toString()"
-        icon="users"
-        color="blue">
-      </app-stats-card>
-      
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
       <app-stats-card 
         title="Tarefas"
         [value]="stats.totalTasks.toString()"
@@ -38,7 +31,7 @@
       <div class="flex space-x-3">
         <button 
           (click)="onNewTask()"
-          class="bg-secondary hover:bg-green-600 text-white px-6 py-3 rounded-lg transition flex items-center space-x-2 shadow-lg">
+          class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition flex items-center space-x-2 shadow-lg">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
@@ -56,7 +49,7 @@
         <p class="text-gray-600 mb-4">Comece criando sua primeira tarefa usando o botão acima</p>
         <button 
           (click)="onNewTask()"
-          class="bg-secondary hover:bg-green-600 text-white px-6 py-3 rounded-lg transition inline-flex items-center space-x-2 shadow-lg">
+          class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition inline-flex items-center space-x-2 shadow-lg">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
@@ -67,7 +60,8 @@
       <app-recent-tasks 
         [tasks]="recentTasks"
         (toggle)="onToggleTask($event)"
-        (view)="onViewTask($event)">
+        (view)="onViewTask($event)"
+        (complete)="onCompleteTask($event)">
       </app-recent-tasks>
     }
   }

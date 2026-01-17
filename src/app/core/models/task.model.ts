@@ -5,6 +5,7 @@ export interface Task {
   description: string;
   elapsedTime: number; // em segundos
   isRunning: boolean;
+  completed?: boolean; // Nova propriedade
 }
 
 export interface TaskCreate {
@@ -17,4 +18,6 @@ export interface TaskUpdate {
   userId: string;
   name: string;
   description: string;
+  elapsedTime: number; // em segundos
+  isRunning: boolean;
 }

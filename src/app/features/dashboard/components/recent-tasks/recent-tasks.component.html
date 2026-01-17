@@ -19,12 +19,11 @@
             <div class="flex space-x-2 ml-4">
               <button 
                 (click)="onToggle(task.id)"
-                class="p-2 rounded-lg transition"
-                [class.bg-danger]="task.isRunning"
+                class="p-2 rounded-lg transition text-white"
+                [class.bg-red-500]="task.isRunning"
                 [class.hover:bg-red-600]="task.isRunning"
-                [class.bg-secondary]="!task.isRunning"
+                [class.bg-green-500]="!task.isRunning"
                 [class.hover:bg-green-600]="!task.isRunning"
-                [class.text-white]="true"
                 title="{{ task.isRunning ? 'Parar' : 'Iniciar' }}">
                 @if (task.isRunning) {
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -35,6 +34,18 @@
                     <path d="M8 5v14l11-7z"></path>
                   </svg>
                 }
+              </button>
+              
+              <button 
+                (click)="onComplete(task.id)"
+                class="px-3 py-1 text-sm rounded transition"
+                [class.bg-green-100]="!task.completed"
+                [class.hover:bg-green-200]="!task.completed"
+                [class.text-green-700]="!task.completed"
+                [class.bg-gray-300]="task.completed"
+                [class.text-gray-600]="task.completed"
+                [title]="task.completed ? 'Reabrir' : 'Concluir'">
+                {{ task.completed ? '↩️' : '✓' }}
               </button>
               
               <button 

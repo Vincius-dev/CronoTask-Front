@@ -14,8 +14,18 @@ export class HeaderComponent {
   private router = inject(Router);
 
   currentUser$ = this.authService.currentUser$;
+  mobileMenuOpen = false;
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+  
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
 
   onLogout(): void {
     this.authService.logout();
+    this.closeMobileMenu();
   }
 }

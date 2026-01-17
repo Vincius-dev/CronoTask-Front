@@ -1,19 +1,21 @@
-<div class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition">
+<div class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
+     [class.opacity-60]="task.completed"
+     [class.border-2]="task.completed"
+     [class.border-green-300]="task.completed">
   <div class="flex justify-between items-start mb-3">
     <div class="flex-1">
-      <h3 class="font-bold text-gray-800 text-lg mb-1">{{ task.name }}</h3>
+      <h3 class="font-bold text-gray-800 text-lg mb-1" [innerHTML]="task.name | linkify"></h3>
       @if (user) {
         <p class="text-sm text-gray-600 mb-2">{{ user.name }}</p>
       }
     </div>
     <button 
       (click)="onToggle()"
-      class="p-2 rounded-lg transition"
-      [class.bg-danger]="task.isRunning"
+      class="p-2 rounded-lg transition text-white"
+      [class.bg-red-500]="task.isRunning"
       [class.hover:bg-red-600]="task.isRunning"
-      [class.bg-secondary]="!task.isRunning"
+      [class.bg-green-500]="!task.isRunning"
       [class.hover:bg-green-600]="!task.isRunning"
-      [class.text-white]="true"
       title="{{ task.isRunning ? 'Parar' : 'Iniciar' }}">
       @if (task.isRunning) {
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -35,10 +37,21 @@
   </div>
 
   @if (task.description) {
-    <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ task.description }}</p>
+    <p class="text-sm text-gray-600 mb-3 line-clamp-2" [innerHTML]="task.description | linkify"></p>
   }
 
   <div class="flex justify-end space-x-2">
+    <button 
+      (click)="onComplete()"
+      class="px-3 py-1 text-sm rounded transition"
+      [class.bg-green-100]="!task.completed"
+      [class.hover:bg-green-200]="!task.completed"
+      [class.text-green-700]="!task.completed"
+      [class.bg-gray-300]="task.completed"
+      [class.text-gray-600]="task.completed"
+      [title]="task.completed ? 'Reabrir tarefa' : 'Marcar como concluída'">
+      {{ task.completed ? '↩️ Reabrir' : '✓ Concluir' }}
+    </button>
     <button 
       (click)="onView()"
       class="px-3 py-1 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition">

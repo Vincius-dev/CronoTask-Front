@@ -2,11 +2,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from '../../../../core/models/task.model';
 import { User } from '../../../../core/models/user.model';
 import { TimerDisplayComponent } from '../../../../shared/components/timer-display/timer-display.component';
+import { LinkifyPipe } from '../../../../shared/pipes/linkify.pipe';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [TimerDisplayComponent],
+  imports: [TimerDisplayComponent, LinkifyPipe],
   templateUrl: './task-card.component.html'
 })
 export class TaskCardComponent {
@@ -17,6 +18,7 @@ export class TaskCardComponent {
   @Output() view = new EventEmitter<string>();
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<string>();
+  @Output() complete = new EventEmitter<string>();
 
   onToggle(): void {
     this.toggle.emit(this.task.id);
@@ -32,5 +34,9 @@ export class TaskCardComponent {
 
   onDelete(): void {
     this.delete.emit(this.task.id);
+  }
+
+  onComplete(): void {
+    this.complete.emit(this.task.id);
   }
 }

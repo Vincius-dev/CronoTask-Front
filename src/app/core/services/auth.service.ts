@@ -18,6 +18,9 @@ export class AuthService {
 
   constructor() {
     console.log('🔐 AuthService initialized');
+    const storedUser = this.getUserFromStorage();
+    console.log('👤 Usuário no localStorage:', storedUser);
+    console.log('👤 currentUser$ emitindo:', this.currentUserSubject.value);
   }
 
   private getUserFromStorage(): User | null {
