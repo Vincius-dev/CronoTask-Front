@@ -141,14 +141,11 @@ export class RegisterComponent {
 
     this.userService.create(userData).subscribe({
       next: (user) => {
-        console.log('✅ Usuário criado:', user);
         this.success = true;
         
-        // Faz login automático após cadastro
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.authService['currentUserSubject'].next(user);
         
-        // Redireciona para dashboard após 1 segundo
         setTimeout(() => {
           this.router.navigate(['/dashboard']);
         }, 1000);
@@ -156,7 +153,6 @@ export class RegisterComponent {
       error: (error) => {
         this.submitting = false;
         this.error = error.error?.message || 'Erro ao criar conta. Tente novamente.';
-        console.error('❌ Erro ao criar usuário:', error);
       }
     });
   }

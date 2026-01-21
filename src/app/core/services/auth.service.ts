@@ -17,10 +17,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
-    console.log('🔐 AuthService initialized');
     const storedUser = this.getUserFromStorage();
-    console.log('👤 Usuário no localStorage:', storedUser);
-    console.log('👤 currentUser$ emitindo:', this.currentUserSubject.value);
   }
 
   private getUserFromStorage(): User | null {
@@ -48,11 +45,8 @@ export class AuthService {
   }
 
   loginByEmail(email: string): Observable<User> {
-    console.log('📤 AuthService.loginByEmail() - GET', `${this.baseUrl}/email/${email}`);
-    
     return this.http.get<User>(`${this.baseUrl}/email/${email}`).pipe(
       tap(user => {
-        console.log('✅ Login successful:', user);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
       })
@@ -60,11 +54,8 @@ export class AuthService {
   }
 
   loginById(userId: string): Observable<User> {
-    console.log('📤 AuthService.loginById() - GET', `${this.baseUrl}/${userId}`);
-    
     return this.http.get<User>(`${this.baseUrl}/${userId}`).pipe(
       tap(user => {
-        console.log('✅ Login successful:', user);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
       })
@@ -72,7 +63,6 @@ export class AuthService {
   }
 
   logout(): void {
-    console.log('🚪 Logout');
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);

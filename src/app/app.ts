@@ -14,10 +14,4 @@ import { AsyncPipe } from '@angular/common';
 export class App {
   authService = inject(AuthService);
   currentUser$ = this.authService.currentUser$;
-  
-  constructor() {
-    this.currentUser$.subscribe(user => {
-      console.log('🏠 App - currentUser$ emitiu:', user);
-    });
-  }
 }

@@ -64,7 +64,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    console.log('🧹 TaskList - ngOnDestroy, cancelando subscriptions');
     this.timerSubscriptions.forEach(sub => sub.unsubscribe());
     this.timerSubscriptions.clear();
   }
@@ -72,21 +71,16 @@ export class TaskListComponent implements OnInit, OnDestroy {
   loadTasksByUser(userId: string): void {
     this.loading = true;
     this.error = '';
-    console.log('📋 TaskList - Carregando tarefas, loading=true');
 
     this.taskService.getByUserId(userId).subscribe({
       next: (tasks) => {
-        console.log('✅ TaskList - Tarefas recebidas:', tasks.length);
         this.tasks = tasks;
         this.applyFilters();
         this.subscribeToTimers();
         this.loading = false;
-        console.log('✅ TaskList - loading=false');
         this.cdr.detectChanges();
-        console.log('🔄 TaskList - detectChanges() chamado');
       },
       error: (error) => {
-        console.log('🔴 TaskList - Erro:', error);
         this.error = error.message;
         this.loading = false;
         this.cdr.detectChanges();
@@ -142,50 +136,32 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   onToggleTask(taskId: string): void {
-    console.log('🎬 TaskList - onToggleTask chamado, taskId:', taskId);
-    
     const task = this.tasks.find(t => t.id === taskId);
-    console.log('🔍 TaskList - Task encontrada:', task);
     
     if (!task) {
       console.log('❌ TaskList - Task não encontrada!');
       return;
     }
 
-    // FAZER O TOGGLE LOCALMENTE PRIMEIRO
     const newIsRunning = !task.isRunning;
-    console.log('🔄 TaskList - Mudando isRunning de', task.isRunning, 'para', newIsRunning);
     
-    // Atualizar localmente
     task.isRunning = newIsRunning;
     
     if (newIsRunning) {
       this.timerService.startTimer(taskId, task.elapsedTime);
-      console.log('▶️ TaskList - Timer iniciado localmente');
     } else {
       const finalTime = this.timerService.stopTimer(taskId);
-      console.log('⏸️ TaskList - Timer parado localmente, tempo final:', finalTime);
       
-      // Atualizar o elapsedTime com o valor final
       if (finalTime !== null) {
         task.elapsedTime = finalTime;
       }
     }
     
-    // Forçar atualização
     this.cdr.detectChanges();
     this.applyFilters();
-    console.log('🔄 TaskList - detectChanges() e applyFilters() chamados');
 
-    // Enviar para o backend
-    console.log('📤 TaskList - Enviando requisição toggleRunning...');
     this.taskService.toggleRunning(taskId).subscribe({
       next: (updatedTask) => {
-        console.group('✅ TaskList - toggleRunning resposta');
-        console.log('Updated task:', updatedTask);
-        console.groupEnd();
-        
-        // Atualizar APENAS o elapsedTime, NÃO o isRunning
         const index = this.tasks.findIndex(t => t.id === taskId);
         if (index !== -1) {
           const currentIsRunning = this.tasks[index].isRunning;
@@ -193,11 +169,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
           this.tasks[index].isRunning = currentIsRunning;
           
           this.applyFilters();
-          console.log('📊 TaskList - Task atualizada, isRunning mantido como:', currentIsRunning);
         }
       },
       error: (error) => {
-        console.log('🔴 TaskList - Erro:', error);
         this.error = error.message;
       }
     });
@@ -217,13 +191,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   onCompleteTask(taskId: string): void {
-    console.log('✅ TaskList - onCompleteTask chamado, taskId:', taskId);
-    
     const taskIndex = this.tasks.findIndex(t => t.id === taskId);
     if (taskIndex !== -1) {
-      // Toggle completed localmente (quando o backend estiver pronto, chamar API aqui)
       this.tasks[taskIndex].completed = !this.tasks[taskIndex].completed;
-      console.log('✅ TaskList - Task completed:', this.tasks[taskIndex].completed);
       
       this.applyFilters();
       this.cdr.detectChanges();
@@ -254,13 +224,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
   
   private subscribeToTimers(): void {
-    console.log('🔔 TaskList - Inscrevendo em timers');
-    
-    // Limpar subscriptions anteriores
     this.timerSubscriptions.forEach(sub => sub.unsubscribe());
     this.timerSubscriptions.clear();
     
-    // Inscrever em cada tarefa
     this.tasks.forEach(task => {
       const subscription = this.timerService.getElapsedTime(task.id).subscribe({
         next: (elapsedTime) => {
@@ -275,7 +241,5 @@ export class TaskListComponent implements OnInit, OnDestroy {
       
       this.timerSubscriptions.set(task.id, subscription);
     });
-    
-    console.log(`✅ TaskList - ${this.timerSubscriptions.size} timer subscriptions criadas`);
   }
 }

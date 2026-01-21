@@ -143,13 +143,11 @@ export class LoginComponent {
 
     loginRequest$.subscribe({
       next: (user) => {
-        console.log('✅ Login bem-sucedido:', user);
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         this.submitting = false;
         this.error = error.error?.message || 'Usuário não encontrado. Verifique suas credenciais.';
-        console.error('❌ Erro no login:', error);
       }
     });
   }

@@ -64,7 +64,6 @@ export class UserDetailComponent implements OnInit {
         this.loadingTasks = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar tarefas:', error);
         this.loadingTasks = false;
       }
     });
